@@ -1,4 +1,5 @@
-const search = document.querySelector('.form-busca');
+const search = document.querySelector('.form-busca')
+const result = document.querySelector('.result')
 
 search.addEventListener('submit', handleRequest)
 
@@ -11,10 +12,23 @@ async function handleRequest(event) {
       return response.json()
     })
     .then((json) => {
-      data({
-        company: json.companyName,
-        volume: json.avgTotalVolue,
-        price: json.extendedPrice
-      }) 
-    })  
+      if (json.cod === 200) {
+        return data({
+          company: json.companyName,
+          volume: json.avgTotalVolume,
+          price: json.latestPrice,
+          latestAt: json.latestTime
+        })
+      } else {
+        alert('Digite um valor valido')
+      }
+    })
+}
+
+function data(json) {
+  result.style.display = 'block';
+  let company = result.querySelector('.company').innerHTML = `${json.company}`
+  let price = result.querySelector('.price').innerHTML = `${json.price}`
+  let volume = result.querySelector('.volume').innerHTML = `${json.volume}`
+  let latestAt = result.querySelector('.update').innerHTML = `${json.latestAt}`
 }
